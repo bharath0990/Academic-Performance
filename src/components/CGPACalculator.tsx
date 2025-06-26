@@ -67,8 +67,12 @@ const CGPACalculator: React.FC = () => {
                 <input
                   type="number"
                   min="0"
-                  value={gradeCounts[parseInt(grade)]}
-                  onChange={(e) => updateCount(parseInt(grade), parseInt(e.target.value) || 0)}
+                  value={gradeCounts[parseInt(grade)] === 0 ? '' : gradeCounts[parseInt(grade)]}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    updateCount(parseInt(grade), value === '' ? 0 : parseInt(value));
+                  }}
+                  placeholder="0"
                   className="w-24 px-3 py-2 border border-gray-300 rounded text-lg text-center"
                 />
               </div>

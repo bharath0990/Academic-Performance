@@ -69,11 +69,12 @@ const AttendanceCalculator: React.FC = () => {
           <input
             type="number"
             min="0"
-            value={presentClasses}
+            value={presentClasses === 0 ? '' : presentClasses}
             onChange={(e) => {
               const value = e.target.value;
               setPresentClasses(value === '' ? 0 : parseInt(value));
             }}
+            placeholder="0"
             className="px-4 py-2 border border-gray-300 rounded-md text-lg text-center"
           />
         </div>
@@ -84,11 +85,12 @@ const AttendanceCalculator: React.FC = () => {
           <input
             type="number"
             min="0"
-            value={totalClasses}
+            value={totalClasses === 0 ? '' : totalClasses}
             onChange={(e) => {
               const value = e.target.value;
               setTotalClasses(value === '' ? 0 : parseInt(value));
             }}
+            placeholder="0"
             className="px-4 py-2 border border-gray-300 rounded-md text-lg text-center"
           />
         </div>
