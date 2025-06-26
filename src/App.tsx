@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calculator, Users } from 'lucide-react';
 import CGPACalculator from './components/CGPACalculator';
 import AttendanceCalculator from './components/AttendanceCalculator';
+import SocialFooter from './components/SocialFooter';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'cgpa' | 'attendance'>('cgpa');
@@ -55,6 +56,9 @@ function App() {
             <AttendanceCalculator />
           )}
         </div>
+
+        {/* Social Footer */}
+        <SocialFooter />
       </div>
     </div>
   );
