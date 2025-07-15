@@ -27,6 +27,10 @@ const AttendanceCalculator: React.FC = () => {
 
   const calculateBunkableClasses = () => {
     const r = requiredPercentage / 100;
+    
+    // Check if present classes exceed total classes
+    if (presentClasses > totalClasses) return 0;
+    
     if (presentClasses / totalClasses < r) return 0;
 
     // Solve: (presentClasses) / (totalClasses + x) = r
@@ -37,6 +41,9 @@ const AttendanceCalculator: React.FC = () => {
   const currentPercentage = calculateCurrentPercentage().toFixed(2);
   const classesNeeded = calculateClassesToAttend();
   const bunkableClasses = calculateBunkableClasses();
+  
+  // Check for invalid input
+  const isInvalidInput = presentClasses > totalClasses;
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -99,35 +106,60 @@ const AttendanceCalculator: React.FC = () => {
       {/* Results */}
       {totalClasses > 0 && (
         <div className="mt-8 text-center space-y-4">
-          <p className="text-gray-600 text-lg">
-            Current Attendance:{" "}
-            <span className="font-bold text-black bg-yellow-200 px-2 py-1 rounded">
-              {presentClasses}/{totalClasses} → {currentPercentage}%
-            </span>
-          </p>
-
-          {parseFloat(currentPercentage) >= requiredPercentage ? (
-            <p className="text-lg text-green-600">
-              🎉 You can bunk{" "}
-              <span className="font-bold text-black">{bunkableClasses}</span> more class
-              {bunkableClasses !== 1 && "es"} and still maintain{" "}
-              {requiredPercentage}% attendance.
-            </p>
+          {isInvalidInput ? (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-lg text-red-600 font-medium">
+                ❌ Error: Present classes ({presentClasses}) cannot be more than total classes ({totalClasses})
+              </p>
+              <p className="text-sm text-red-500 mt-2">
+                Please check your input values.
+              </p>
+            </div>
           ) : (
             <>
-              <p className="text-lg text-red-600">
-                ⚠️ You need to attend{" "}
-                <span className="font-bold text-black">{classesNeeded}</span> more class
-                {classesNeeded !== 1 && "es"} to reach {requiredPercentage}%.
-              </p>
-              <p className="text-gray-600">
-                Future Attendance:{" "}
-                <span className="font-bold text-black bg-green-200 px-2 py-1 rounded">
-                  {presentClasses + classesNeeded}/{totalClasses + classesNeeded} → {requiredPercentage}%
+              <p className="text-gray-600 text-lg">
+                Current Attendance:{" "}
+                <span className="font-bold text-black bg-yellow-200 px-2 py-1 rounded">
+                  {presentClasses}/{totalClasses} → {currentPercentage}%
                 </span>
               </p>
+
+              {parseFloat(currentPercentage) >= requiredPercentage ? (
+                <p className="text-lg text-green-600">
+                  🎉 You can bunk{" "}
+                  <span className="font-bold text-black">{bunkableClasses}</span> more class
+                  {bunkableClasses !== 1 && "es"} and still maintain{" "}
+                  {requiredPercentage}% attendance.
+                </p>
+              ) : (
+                <>
+                  <p className="text-lg text-red-600">
+                    ⚠️ You need to attend{" "}
+                    <span className="font-bold text-black">{classesNeeded}</span> more class
+                    {classesNeeded !== 1 && "es"} to reach {requiredPercentage}%.
+                  </p>
+                  <p className="text-gray-600">
+                    Future Attendance:{" "}
+                    <span className="font-bold text-black bg-green-200 px-2 py-1 rounded">
+                      {presentClasses + classesNeeded}/{totalClasses + classesNeeded} → {requiredPercentage}%
+                    </span>
+                  </p>
+                </>
+              )}
             </>
           )}
+        </div>
+      )}
+
+      {/* Additional validation for zero present classes with total classes */}
+      {totalClasses > 0 && presentClasses === 0 && !isInvalidInput && (
+        <div className="mt-4 text-center">
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+            <p className="text-orange-600">
+              💡 You haven't attended any classes yet. You need to attend{" "}
+              <span className="font-bold">{classesNeeded}</span> consecutive classes to reach {requiredPercentage}% attendance.
+            </p>
+          </div>
         </div>
       )}
 
